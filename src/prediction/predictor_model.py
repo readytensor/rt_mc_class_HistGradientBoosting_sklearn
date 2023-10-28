@@ -25,7 +25,7 @@ class Classifier:
 
     def __init__(
             self,
-            loss: Optional[str] = 'squared_error',
+            loss: Optional[str] = 'log_loss',
             learning_rate: Optional[float] = 0.1,
             max_depth: Optional[Union[int, None]] = None,
             max_leaf_nodes: Optional[Union[int, None]] = 31,
@@ -36,12 +36,14 @@ class Classifier:
 
         Args:
             loss (optional, str):
-            {‘squared_error’, ‘absolute_error’, ‘gamma’, ‘poisson’, ‘quantile’}, default=’squared_error’
-            The loss function to use in the boosting process. Note that the “squared error”,
-            “gamma” and “poisson” losses actually implement “half least squares loss”, “half gamma deviance” and “half
-            poisson deviance” to simplify the computation of the gradient. Furthermore, “gamma” and “poisson” losses
-            internally use a log-link, “gamma” requires y > 0 and “poisson” requires y >= 0. “quantile” uses the pinball
-            loss.
+                The loss function to use in the boosting process.
+                For binary classification problems, ‘log_loss’ is also known as logistic loss, binomial deviance or binary
+                crossentropy. Internally, the model fits one tree per boosting iteration and uses the logistic sigmoid function
+                (expit) as inverse link function to compute the predicted positive class probability.
+
+                For multiclass classification problems, ‘log_loss’ is also known as multinomial deviance or categorical crossentropy.
+                Internally, the model fits one tree per boosting iteration and per class and uses the softmax function as inverse
+                link function to compute the predicted probabilities of the classes.
 
             learning_rate (optional, float): The learning rate, also known as shrinkage. This is used as a
             multiplicative factor for the leaves values. Use 1 for no shrinkage.
